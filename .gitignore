@@ -1,0 +1,9 @@
+# Системные файлы и IDE-конфигурации
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+
+# IDE
+.vscode/
+.idea/
