@@ -1,10 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-// Включаем строгую типизацию
+// Enable strict typing
 declare(strict_types=1);
 
-// Окрашивает текст для цветного вывода в терминале
+// Colors text for colored output in the terminal
 function color(string $text, string $colorCode): string
 {
     if (stream_isatty(STDOUT)) {
@@ -13,14 +13,14 @@ function color(string $text, string $colorCode): string
     return $text;
 }
 
-// Запрашивает ввод у пользователя с подсвеченным текстом
+// Prompts the user for input with colored text
 function prompt(string $text): string
 {
     echo color($text, '36'); // бирюзовый
     return trim(fgets(STDIN));
 }
 
-// Выполняет команду и возвращает её вывод, безопасно обрабатывая null
+// Executes a command and returns its output, handling null safely
 function runWithOutput(string $command): string
 {
     echo color("\n> $command\n", '33'); // жёлтый
@@ -28,26 +28,26 @@ function runWithOutput(string $command): string
     return is_string($output) ? trim($output) : '';
 }
 
-// Выводит сообщение с цветом и текущим временем
+// Prints a log message with color and timestamp
 function colorizedLog(string $message, string $color = '32'): void
 {
     echo color("[" . date('Y-m-d H:i:s') . "] $message\n", $color);
 }
 
-// Генерирует безопасное имя нового файла, добавляя _converted перед расширением
+// Generates a safe new filename by appending _converted before the extension
 function getSafeNewFilename(string $original, string $ext): string
 {
     $path = pathinfo($original);
     return $path['dirname'] . '/' . $path['filename'] . '_converted.' . $ext;
 }
 
-// Определяет MIME-тип файла (например, video/mp4)
+// Detects the MIME type of a file (e.g., video/mp4)
 function detectMimeType(string $file): string
 {
     return mime_content_type($file) ?: '';
 }
 
-// Получает видеокодек и аудиокодек файла с помощью ffprobe
+// Retrieves video and audio codecs using ffprobe
 function getCodecs(string $file): array
 {
     $videoCodec = trim(shell_exec("ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=nokey=1:noprint_wrappers=1 " . escapeshellarg($file)) ?? '');
@@ -55,7 +55,7 @@ function getCodecs(string $file): array
     return [$videoCodec, $audioCodec];
 }
 
-// Создаёт директорию загрузки, если она не существует
+// Creates the downloads directory if it doesn't exist
 function getWritableDownloadsDir(): string
 {
     $targetDir = getenv("HOME") . "/Downloads/Videos";
@@ -70,18 +70,18 @@ function getWritableDownloadsDir(): string
     return $targetDir;
 }
 
-// === Основной код ===
+// === Main logic ===
 
 $downloadsDir = getWritableDownloadsDir();
 
-// Получаем URL от пользователя
+// Get the URL from the user
 $url = prompt("Введите URL для скачивания: ");
 if (empty($url)) {
     colorizedLog("URL не может быть пустым. Выход.", '31');
     exit(1);
 }
 
-// Скачиваем файл через yt-dlp и получаем путь к нему
+// Download the file using yt-dlp and get its path
 $escapedUrl = escapeshellarg($url);
 $outputTemplate = escapeshellarg($downloadsDir . '/%(title).200B.%(ext)s');
 $downloadedFile = runWithOutput("yt-dlp --print after_move:filepath -o $outputTemplate $escapedUrl");
@@ -93,7 +93,7 @@ if (empty($downloadedFile) || !file_exists($downloadedFile)) {
 
 colorizedLog("Скачанный файл: " . basename($downloadedFile));
 
-// Определяем MIME-тип, расширение и кодеки
+// Detect MIME type, extension, and codecs
 $mime = detectMimeType($downloadedFile);
 $ext = strtolower(pathinfo($downloadedFile, PATHINFO_EXTENSION));
 [$vCodec, $aCodec] = getCodecs($downloadedFile);
@@ -101,7 +101,7 @@ colorizedLog("MIME: $mime | Video codec: $vCodec | Audio codec: $aCodec", '36');
 
 $needsReencoding = false;
 
-// Проверяем: если это видео, и оно не в mp4 и не h264 — нужно перекодировать
+// Check if re-encoding is needed: must be mp4 + h264 for video
 if (str_starts_with($mime, 'video')) {
     if (!($ext === 'mp4' && $vCodec === 'h264')) {
         $needsReencoding = true;
@@ -111,18 +111,18 @@ if (str_starts_with($mime, 'video')) {
     exit(1);
 }
 
-// Если перекодирование не нужно — выходим
+// If no re-encoding is needed, exit
 if (!$needsReencoding) {
     colorizedLog("Файл уже в нужном формате ($ext) и с нужным кодеком ($vCodec). Перекодировка не требуется.");
     exit(0);
 }
 
-// Перекодируем файл в .mp4 с кодеком H.264 и звуком AAC
+// Re-encode the file to .mp4 using H.264 and AAC
 $newFile = getSafeNewFilename($downloadedFile, 'mp4');
 colorizedLog("Перекодируем видео в mp4 (H.264)...", '34');
 runWithOutput("ffmpeg -i " . escapeshellarg($downloadedFile) . " -c:v libx264 -c:a aac -strict experimental " . escapeshellarg($newFile));
 
-// Проверяем результат и удаляем оригинал
+// Check result and remove the original file
 if (file_exists($newFile)) {
     unlink($downloadedFile);
     colorizedLog("Удалён оригинальный файл: " . basename($downloadedFile), '33');
