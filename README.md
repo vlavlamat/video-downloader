@@ -56,20 +56,20 @@ brew install ffmpeg
 Скопируйте содержимое файла в файл `video-dl`, например:
 
 ```bash
-nano ~/bin/video-dl
+nano ~/bin/video-downloader
 # вставьте код из скрипта, сохраните
 ```
 
 Или скачайте файл из репозитория (если загружен в GitHub):
 
 ```bash
-wget https://raw.githubusercontent.com/yourusername/video-dl/main/video-dl -O ~/bin/video-dl
+wget https://raw.githubusercontent.com/yourusername/video-dl/main/video-dl -O ~/bin/video-downloader
 ```
 
 ### 3. Сделайте файл исполняемым
 
 ```bash
-chmod +x ~/bin/video-dl
+chmod +x ~/bin/video-downloader
 ```
 
 ### 4. Сделайте скрипт доступным в любой точке системы
@@ -83,19 +83,19 @@ chmod +x ~/bin/video-dl
 1. Переместите файл:
 
    ```bash
-   sudo mv video-dl /usr/local/bin/video-dl
+   sudo mv video-downloader /usr/local/bin/video-downloader
    ```
 
 2. Сделайте его исполняемым:
 
    ```bash
-   sudo chmod +x /usr/local/bin/video-dl
+   sudo chmod +x /usr/local/bin/video-downloader
    ```
 
 Теперь вы можете вызывать скрипт из любого места:
 
 ```bash
-video-dl
+video-downloader
 ```
 
 #### 🏠 **Вариант 2: Установить в `~/bin` (для одного пользователя)**
@@ -111,8 +111,8 @@ video-dl
 2. Переместите скрипт в эту папку:
 
    ```bash
-   mv video-dl ~/bin/video-dl
-   chmod +x ~/bin/video-dl
+   mv video-downloader ~/bin/video-downloader
+   chmod +x ~/bin/video-downloader
    ```
 
 3. Добавьте `~/bin` в переменную окружения `$PATH`, если он ещё не добавлен.
@@ -131,7 +131,7 @@ video-dl
 Теперь вы тоже можете запускать скрипт как:
 
 ```bash
-video-dl
+video-downloader
 ```
 
 Перезапустите терминал или выполните:
@@ -145,7 +145,7 @@ source ~/.bashrc  # или ваш профиль
 Запустите скрипт из терминала:
 
 ```bash
-video-dl
+video-downloader
 ```
 
 Вы увидите приглашение:
@@ -255,20 +255,20 @@ brew install ffmpeg
 Copy the contents into a file called `video-dl`, for example:
 
 ```bash
-nano ~/bin/video-dl
+nano ~/bin/video-downloader
 # paste the script code and save
 ```
 
 Or download the file from a repository (if uploaded to GitHub):
 
 ```bash
-wget https://raw.githubusercontent.com/yourusername/video-dl/main/video-dl -O ~/bin/video-dl
+wget https://raw.githubusercontent.com/yourusername/video-dl/main/video-dl -O ~/bin/video-downloader
 ```
 
 ### 3. Make the file executable
 
 ```bash
-chmod +x ~/bin/video-dl
+chmod +x ~/bin/video-downloader
 ```
 
 ### 4. Make the script available system-wide
@@ -282,19 +282,19 @@ Use this if you have root access and want the script to behave like a system-wid
 1. Move the file:
 
    ```bash
-   sudo mv video-dl /usr/local/bin/video-dl
+   sudo mv video-downloader /usr/local/bin/video-downloader
    ```
 
 2. Make it executable:
 
    ```bash
-   sudo chmod +x /usr/local/bin/video-dl
+   sudo chmod +x /usr/local/bin/video-downloader
    ```
 
 Now you can run the script from anywhere:
 
 ```bash
-video-dl
+video-downloader
 ```
 
 #### 🏠 **Option 2: Install to `~/bin` (per-user setup)**
@@ -310,8 +310,8 @@ Use this if you don’t want (or can’t) use `sudo`.
 2. Move the script into this directory:
 
    ```bash
-   mv video-dl ~/bin/video-dl
-   chmod +x ~/bin/video-dl
+   mv video-downloader ~/bin/video-downloader
+   chmod +x ~/bin/video-ddownloader
    ```
 
 3. Add `~/bin` to your `$PATH` if it’s not already included.
@@ -330,7 +330,7 @@ Use this if you don’t want (or can’t) use `sudo`.
 Now you can also run the script like this:
 
 ```bash
-video-dl
+video-downloader
 ```
 
 Restart the terminal or run:
@@ -344,7 +344,7 @@ source ~/.bashrc  # or your corresponding profile
 Run the script from the terminal:
 
 ```bash
-video-dl
+video-downloader
 ```
 
 You’ll see a prompt:
